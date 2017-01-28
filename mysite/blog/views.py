@@ -1,14 +1,32 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
-from .models import Post, Comment
+from taggit.models import Tag
+from .models import Post
 from .forms import CommentForm
 
 
 class PostListView(ListView):
-    queryset = Post.published.all()
     context_object_name = 'posts'
     paginate_by = 3
     template_name = 'blog/post/list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(PostListView, self).get_context_data(**kwargs)
+
+        if self.kwargs.get('tag_slug'):
+            tag_slug = self.kwargs.get('tag_slug')
+            tag = get_object_or_404(Tag, slug=tag_slug)
+            context['tag'] = tag
+
+        return context
+
+    def get_queryset(self):
+        if self.kwargs.get('tag_slug'):
+            tag_slug = self.kwargs.get('tag_slug')
+            tag = get_object_or_404(Tag, slug=tag_slug)
+            return Post.published.filter(tags__in=[tag])
+
+        return Post.published.all()
 
 
 def post_detail(request, year, month, day, post):
@@ -34,4 +52,3 @@ def post_detail(request, year, month, day, post):
                   {'post': post,
                    'comments': comments,
                    'comment_form': comment_form})
-
