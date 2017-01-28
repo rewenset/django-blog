@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from .feeds import LatestPostsFeed
 from . import views
 
 urlpatterns = [
@@ -13,4 +14,8 @@ urlpatterns = [
     url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/(?P<post>[-\w]+)$',
         views.post_detail,
         name='post_detail'),
+
+    url(r'^feed/$',
+        LatestPostsFeed(),
+        name='post_feed'),
 ]
