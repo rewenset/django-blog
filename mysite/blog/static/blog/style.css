@@ -1,0 +1,19 @@
+html {
+    min-height: 100%;
+}
+
+body {
+    height: 100% !important;
+    min-height: 100vh;
+    position: relative;
+}
+
+#content {
+    min-height: 100vh;
+    background-color: rgba(245, 249, 231, 0.56);
+}
+
+#sidebar {
+    min-height: 100vh;
+    background-color: #CEE0E0;
+}
